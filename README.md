@@ -1,7 +1,7 @@
 # EssentialsEconomy
 Economy plugin for PocketMine-MP server.
 
-## Commands/
+## Commands
 <table>
   <tr>
     <th>Command</th>
