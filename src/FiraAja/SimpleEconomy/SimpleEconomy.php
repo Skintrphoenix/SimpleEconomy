@@ -21,7 +21,7 @@ class SimpleEconomy extends PluginBase {
     {
         SimpleEconomy::$instance = $this;
         if (!class_exists(libasynql::class)) {
-            $this->getLogger()->error("libasynql not found. Please download PiggyCrates from Poggit-CI or use DEVirion (not recommended).");
+            $this->getLogger()->error("libasynql not found.");
             $this->getServer()->shutdown();
         }
         $this->saveDefaultConfig();
