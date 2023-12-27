@@ -1,0 +1,19 @@
+name: SimpleEconomy
+author: FiraAja
+main: FiraAja\SimpleEconomy\SimpleEconomy
+api: 5.0.0
+version: 1.0.0
+
+permissions:
+  economy.command:
+    default: true
+  economy.command.balance:
+    default: true
+  economy.command.pay:
+    default: true
+  economy.command.add:
+    default: op
+  economy.command.reduce:
+    default: op
+  economy.command.set:
+    default: op
