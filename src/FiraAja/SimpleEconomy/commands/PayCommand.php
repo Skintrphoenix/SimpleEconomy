@@ -31,7 +31,7 @@ class PayCommand extends Command {
             $playerExact = Server::getInstance()->getPlayerExact($player);
 
             if ($playerExact !== null) {
-                $player = $playerExact->getName();
+                $player = $playerExact;
             }
         }
         if (!is_numeric($args[1])) {
@@ -41,13 +41,13 @@ class PayCommand extends Command {
 
         EconomyAPI::get($player, static function (array $rows) use ($player, $args, $playerExact, $sender): void {
             if (count($rows) > 0) {
-                EconomyAPI::balance($sender->getName(), static function (array $rows) use ($args, $player, $playerExact, $sender): void {
+                EconomyAPI::balance($sender, static function (array $rows) use ($args, $player, $playerExact, $sender): void {
                     if ($rows[0]['balance'] >= $args[1]) {
-                        EconomyAPI::subtract($sender->getName(), $args[1], static function () use ($args, $player, $playerExact, $sender): void {
+                        EconomyAPI::subtract($sender, $args[1], static function () use ($args, $player, $playerExact, $sender): void {
                             EconomyAPI::add($player, $args[1], static function () use ($playerExact, $args, $sender): void {
-                                $playerExact->sendMessage(TextFormat::GREEN . "You have received " . TextFormat::YELLOW . $args[1] . TextFormat::GREEN . " from " . TextFormat::YELLOW . $sender->getName());
+                                $playerExact->sendMessage(TextFormat::GREEN . "You have received " . TextFormat::YELLOW . $args[1] . TextFormat::GREEN . " from " . TextFormat::YELLOW . $sender);
                             }, static fn(SqlError $error) => SimpleEconomy::getInstance()->getLogger()->error($error->getMessage()));
-                            $sender->sendMessage(TextFormat::GREEN . "You have paid " . TextFormat::YELLOW . $args[1] . TextFormat::GREEN . " to " . TextFormat::YELLOW . $playerExact->getName());
+                            $sender->sendMessage(TextFormat::GREEN . "You have paid " . TextFormat::YELLOW . $args[1] . TextFormat::GREEN . " to " . TextFormat::YELLOW . $playerExact);
                         }, static fn(SqlError $error) => SimpleEconomy::getInstance()->getLogger()->error($error->getMessage()));
                     }
                 }, static fn(SqlError $error) => SimpleEconomy::getInstance()->getLogger()->error($error->getMessage()));

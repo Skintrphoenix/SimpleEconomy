@@ -8,7 +8,7 @@ Economy plugin for PocketMine-MP server.
     <th>Subcommand</th>
     <th>Alias</th>
     <th>Description</th>
-    <th>Usage</th>
+    <th>Usage</th>[/
   </tr>
   <tr>
     <td rowspan="4">economy</td>

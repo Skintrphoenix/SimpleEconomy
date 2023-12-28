@@ -35,9 +35,9 @@ class EconomyCommand extends Command {
                         $sender->sendMessage(TextFormat::RED . "Amount must be type numeric");
                         return;
                     }
-                    EconomyAPI::get($player->getName(), static function (array $rows) use ($args, $player, $sender): void {
+                    EconomyAPI::get($player, static function (array $rows) use ($args, $player, $sender): void {
                         if (count($rows) > 0) {
-                            EconomyAPI::add($player->getName(), $args[2], static function () use ($args, $sender, $player): void {
+                            EconomyAPI::add($player, $args[2], static function () use ($args, $sender, $player): void {
                                 $sender->sendMessage(TextFormat::GREEN . "You have added " . TextFormat::YELLOW . $args[2] . TextFormat::GREEN . " to " . TextFormat::YELLOW . $player->getName());
                             }, static fn(SqlError $error) => SimpleEconomy::getInstance()->getLogger()->error($error->getMessage()));
                         }
@@ -56,9 +56,9 @@ class EconomyCommand extends Command {
                         $sender->sendMessage(TextFormat::RED . "Amount must be type numeric");
                         return;
                     }
-                    EconomyAPI::get($player->getName(), static function (array $rows) use ($args, $player, $sender): void {
+                    EconomyAPI::get($player, static function (array $rows) use ($args, $player, $sender): void {
                         if (count($rows) > 0) {
-                            EconomyAPI::subtract($player->getName(), $args[2], static function () use ($args, $sender, $player): void {
+                            EconomyAPI::subtract($player, $args[2], static function () use ($args, $sender, $player): void {
                                 $sender->sendMessage(TextFormat::GREEN . "You have take " . TextFormat::YELLOW . $args[2] . TextFormat::GREEN . " from " . TextFormat::YELLOW . $player->getName() . "'s " . TextFormat::GREEN . "balance");
                             }, static fn(SqlError $error) => SimpleEconomy::getInstance()->getLogger()->error($error->getMessage()));
                         }
@@ -75,9 +75,9 @@ class EconomyCommand extends Command {
                         $sender->sendMessage(TextFormat::RED . "Amount must be type numeric");
                         return;
                     }
-                    EconomyAPI::get($player->getName(), static function (array $rows) use ($args, $player, $sender): void {
+                    EconomyAPI::get($player, static function (array $rows) use ($args, $player, $sender): void {
                         if (count($rows) > 0) {
-                            EconomyAPI::set($player->getName(), $args[2], static function () use ($args, $sender, $player): void {
+                            EconomyAPI::set($player, $args[2], static function () use ($args, $sender, $player): void {
                                 $sender->sendMessage(TextFormat::GREEN . "You have set " . TextFormat::YELLOW . $player->getName() . "'s " . TextFormat::GREEN . "balance to " . TextFormat::YELLOW . $args[2]);
                             }, static fn(SqlError $error) => SimpleEconomy::getInstance()->getLogger()->error($error->getMessage()));
                         }

@@ -32,12 +32,12 @@ class BalanceCommand extends Command {
             $playerExact = Server::getInstance()->getPlayerExact($player);
 
             if ($playerExact !== null) {
-                $player = $playerExact->getName();
+                $player = $playerExact;
             }
         }
 
-        $player ??= $sender->getName();
-        $isSelf = $player === $sender->getName();
+        $player ??= $sender;
+        $isSelf = $player == $sender->getName();
 
         EconomyAPI::get($player, static function (array $rows) use ($player, $sender, $isSelf): void {
             if (count($rows) > 0) {
@@ -47,7 +47,7 @@ class BalanceCommand extends Command {
                     SimpleEconomy::getInstance()->getLogger()->error($error->getMessage());
                 });
             } else {
-                $sender->sendMessage(TextFormat::RED . "Player " . $player . " not found");
+                $sender->sendMessage(TextFormat::RED . "Player " . $player->getName() . " not found");
             }
         }, static function (SqlError $error) {
             SimpleEconomy::getInstance()->getLogger()->error($error->getMessage());

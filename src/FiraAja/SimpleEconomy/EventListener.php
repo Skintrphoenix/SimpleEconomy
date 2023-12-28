@@ -19,9 +19,9 @@ class EventListener implements Listener {
         $player = $event->getPlayer();
 
         if ($player->isConnected()) {
-            EconomyAPI::get($player->getName(), static function (array $rows) use ($player): void {
+            EconomyAPI::get($player, static function (array $rows) use ($player): void {
                 if (count($rows) === 0) {
-                    EconomyAPI::insert($player->getName(), EconomyCurrency::default(),
+                    EconomyAPI::insert($player, EconomyCurrency::default(),
                         static fn() => SimpleEconomy::getInstance()->getLogger()->info("New player: " . $player->getName() . " registered"),
                         static fn(SqlError $error) => SimpleEconomy::getInstance()->getLogger()->error($error->getMessage())
                     );

@@ -2,89 +2,106 @@
 
 namespace FiraAja\SimpleEconomy\api;
 
+use FiraAja\SimpleEconomy\event\BalanceChangedEvent;
 use FiraAja\SimpleEconomy\SimpleEconomy;
 use FiraAja\SimpleEconomy\utils\QueryConstant;
+use pocketmine\player\Player;
 
 class EconomyAPI {
 
     /**
-     * @param string $player
+     * @param Player $player
      * @param int $balance
      * @param ?callable $onSuccess
      * @param ?callable $onError
      * @return void
      */
-    public static function insert(string $player, int $balance, ?callable $onSuccess = null, ?callable $onError = null): void {
+    public static function insert(Player $player, int $balance, ?callable $onSuccess = null, ?callable $onError = null): void {
         SimpleEconomy::getInstance()->getProvider()->executeInsert(QueryConstant::ECONOMY_CREATE, [
-            "player" => $player,
+            "player" => $player->getName(),
             "balance" => $balance
         ], $onSuccess, $onError);
     }
 
     /**
-     * @param string $player
+     * @param Player $player
      * @param ?callable $onSuccess
      * @param ?callable $onError
      * @return void
      */
-    public static function get(string $player, ?callable $onSuccess = null, ?callable $onError = null): void {
+    public static function get(Player $player, ?callable $onSuccess = null, ?callable $onError = null): void {
         SimpleEconomy::getInstance()->getProvider()->executeSelect(QueryConstant::ECONOMY_LOAD, [
-            "player" => $player,
+            "player" => $player->getName(),
         ], $onSuccess, $onError);
     }
 
     /**
-     * @param string $player
+     * @param Player $player
      * @param ?callable $onSuccess
      * @param ?callable $onError
      * @return void
      */
-    public static function balance(string $player, ?callable $onSuccess = null, ?callable $onError = null): void {
+    public static function balance(Player $player, ?callable $onSuccess = null, ?callable $onError = null): void {
         SimpleEconomy::getInstance()->getProvider()->executeSelect(QueryConstant::ECONOMY_BALANCE, [
-            "player" => $player,
+            "player" => $player->getName(),
         ], $onSuccess, $onError);
     }
 
     /**
-     * @param string $player
+     * @param Player $player
      * @param int $balance
      * @param ?callable $onSuccess
      * @param ?callable $onError
      * @return void
      */
-    public static function add(string $player, int $balance, ?callable $onSuccess = null, ?callable $onError = null): void {
+    public static function add(Player $player, int $balance, ?callable $onSuccess = null, ?callable $onError = null): void {
+        $event = new BalanceChangedEvent($player, $balance);
+        $event->call();
+
+        if ($event->isCancelled()) return;
+
         SimpleEconomy::getInstance()->getProvider()->executeInsert(QueryConstant::ECONOMY_ADD_BALANCE, [
-            "player" => $player,
+            "player" => $player->getName(),
             "balance" => $balance
-        ], $onSuccess, $onError);
+        ], $onSuccess($event), $onError);
     }
 
     /**
-     * @param string $player
+     * @param Player $player
      * @param int $balance
      * @param ?callable $onSuccess
      * @param ?callable $onError
      * @return void
      */
-    public static function subtract(string $player, int $balance, ?callable $onSuccess = null, ?callable $onError = null): void {
+    public static function subtract(Player $player, int $balance, ?callable $onSuccess = null, ?callable $onError = null): void {
+        $event = new BalanceChangedEvent($player, $balance);
+        $event->call();
+
+        if ($event->isCancelled()) return;
+
         SimpleEconomy::getInstance()->getProvider()->executeInsert(QueryConstant::ECONOMY_SUBTRACT_BALANCE, [
-            "player" => $player,
+            "player" => $player->getName(),
             "balance" => $balance
-        ], $onSuccess, $onError);
+        ], $onSuccess($event), $onError);
     }
 
     /**
-     * @param string $player
+     * @param Player $player
      * @param int $balance
      * @param ?callable $onSuccess
      * @param ?callable $onError
      * @return void
      */
-    public static function set(string $player, int $balance, ?callable $onSuccess = null, ?callable $onError = null): void {
+    public static function set(Player $player, int $balance, ?callable $onSuccess = null, ?callable $onError = null): void {
+        $event = new BalanceChangedEvent($player, $balance);
+        $event->call();
+
+        if ($event->isCancelled()) return;
+
         SimpleEconomy::getInstance()->getProvider()->executeInsert(QueryConstant::ECONOMY_SET_BALANCE, [
-            "player" => $player,
+            "player" => $player->getName(),
             "balance" => $balance
-        ], $onSuccess, $onError);
+        ], $onSuccess($event), $onError);
     }
 
     /**
