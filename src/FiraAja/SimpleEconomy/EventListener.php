@@ -9,7 +9,7 @@ use poggit\libasynql\SqlError;
 
 class EventListener implements Listener {
 
-    public function __construct (protected readonly SimpleEconomy $plugin) {}
+    public function __construct (protected SimpleEconomy $plugin) {}
 
     /**
      * @param PlayerLoginEvent $event
